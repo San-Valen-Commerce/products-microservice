@@ -1,6 +1,6 @@
 ## Description
 
-Backend for the [e-commerce-app](https://github.com/Diegovalen47/e-commerce-app) client project. This project is a REST API built with NestJS and drizzle ORM. It also comes with a docker-compose file with a postgres and pgadmin to manage the storage locally.
+Products microservice. This project is a microservice built with NestJS and drizzle ORM. It also comes with a docker-compose file with a postgres and pgadmin to manage the storage locally.
 
 ## Installation
 
@@ -22,7 +22,6 @@ $ pnpm run start:dev // start the server
 ```
 pgadmin: http://localhost:5050/
 drizzle studio: https://local.drizzle.studio/
-api docs: http://localhost:port/api
 
 ## Run migrations when changes are made to the model
 
