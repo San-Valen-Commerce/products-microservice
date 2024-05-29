@@ -60,9 +60,11 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
 
+    const { id: _, ...updateProductDtoWithoutId } = updateProductDto;
+
     const result = await this.drizzle.db
       .update(this.drizzle.schema.product)
-      .set(updateProductDto)
+      .set(updateProductDtoWithoutId)
       .where(
         eq(this.drizzle.schema.product.id, id)
       )
