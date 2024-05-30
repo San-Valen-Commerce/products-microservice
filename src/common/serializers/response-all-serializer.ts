@@ -5,6 +5,6 @@ export interface IMetadata {
 }
 
 export interface ResposeAllSerializer<T> {
-  data: T[],
-  metadata: IMetadata
+  data: T[];
+  metadata: IMetadata;
 }

@@ -1,8 +1,4 @@
-import {
-  Controller,
-  ParseIntPipe,
-  Query
-} from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -22,13 +18,16 @@ export class ProductsController {
 
   // @Get()
   @MessagePattern({ cmd: 'list_products' })
-  async findAll(@Payload() paginationDto: PaginationDto): Promise<ResposeAllSerializer<ProductLightSerializer>> {
-    const { data, metadata } = await this.productsService.findAll(paginationDto);
+  async findAll(
+    @Payload() paginationDto: PaginationDto,
+  ): Promise<ResposeAllSerializer<ProductLightSerializer>> {
+    const { data, metadata } =
+      await this.productsService.findAll(paginationDto);
 
     const response: ResposeAllSerializer<ProductLightSerializer> = {
       data: ProductLightSerializer.fromMany(data),
-      metadata
-    }
+      metadata,
+    };
 
     return response;
   }

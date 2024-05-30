@@ -1,4 +1,4 @@
-import { Product } from 'src/drizzle/schema'
+import { Product } from 'src/drizzle/schema';
 
 export class ProductEntity implements Product {
   id!: number;

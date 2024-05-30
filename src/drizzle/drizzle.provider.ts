@@ -1,11 +1,11 @@
-import { Client } from "pg"
-import { drizzle } from "drizzle-orm/node-postgres"
-import * as Schema from './schema'
-import { envs } from "src/config"
-import { Logger } from "@nestjs/common"
+import { Client } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import * as Schema from './schema';
+import { envs } from 'src/config';
+import { Logger } from '@nestjs/common';
 
-export const DrizzleAsyncProvider = "drizzleProvider"
-export const DrizzleSchemaProvider = "drizzleSchemaProvider"
+export const DrizzleAsyncProvider = 'drizzleProvider';
+export const DrizzleSchemaProvider = 'drizzleSchemaProvider';
 
 export const drizzleProvider = [
   {
@@ -13,16 +13,16 @@ export const drizzleProvider = [
     useFactory: async () => {
       const client = new Client({
         connectionString: envs.DATABASE_URL,
-      })
+      });
 
       await client.connect();
-      Logger.log("Connected to database", "DrizzleProvider")
-      const db = drizzle(client, { schema: Schema })
-      return db
-    }
+      Logger.log('Connected to database', 'DrizzleProvider');
+      const db = drizzle(client, { schema: Schema });
+      return db;
+    },
   },
   {
     provide: DrizzleSchemaProvider,
-    useValue: Schema
-  }
-]
+    useValue: Schema,
+  },
+];
