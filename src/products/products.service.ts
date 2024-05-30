@@ -1,20 +1,27 @@
 import { count, eq, and } from 'drizzle-orm';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { PaginationDto, IMetadata } from 'src/common';
 import { ProductEntity } from './entities/product.entity';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ProductsService {
   constructor(private drizzle: DrizzleService) {}
 
   async create(createProductDto: CreateProductDto) {
-    return this.drizzle.db
+    const result = await this.drizzle.db
       .insert(this.drizzle.schema.product)
       .values(createProductDto)
-      .returning();
+      .returning()
+
+    if (result.length) {
+      return result[0];
+    }
+
+    return result;
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -46,16 +53,26 @@ export class ProductsService {
     };
   }
 
-  findOne(id: number) {
-    return this.drizzle.db
-      .select()
-      .from(this.drizzle.schema.product)
-      .where(
-        and(
-          eq(this.drizzle.schema.product.id, id),
-          eq(this.drizzle.schema.product.available, true)
-        )
-      );
+  async findOne(id: number) {
+
+    const result = await this.drizzle.db
+    .select()
+    .from(this.drizzle.schema.product)
+    .where(
+      and(
+        eq(this.drizzle.schema.product.id, id),
+        eq(this.drizzle.schema.product.available, true)
+      )
+    )
+
+    if (result.length === 0) {
+      throw new RpcException({
+        message: `Product #${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
+    }
+    
+    return result[0];
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
@@ -71,10 +88,13 @@ export class ProductsService {
       .returning()
 
     if (result.length === 0) {
-      throw new NotFoundException();
+      throw new RpcException({
+        message: `Product #${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
     }
 
-    return result;
+    return result[0];
   }
 
   async remove(id: number) {
@@ -87,10 +107,13 @@ export class ProductsService {
       .returning()
 
     if (result.length === 0) {
-      throw new NotFoundException();
+      throw new RpcException({
+        message: `Product #${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
     }
 
-    return result;
+    return result[0];
   }
 
   async softRemove(id: number) {
@@ -104,10 +127,13 @@ export class ProductsService {
       .returning()
 
     if (result.length === 0) {
-      throw new NotFoundException();
+      throw new RpcException({
+        message: `Product #${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
     }
 
-    return result;
+    return result[0];
   }
 
   async getTotalProducts() {

@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import { env } from 'process';
 import { z } from "zod";
 
 interface EnvVars {
