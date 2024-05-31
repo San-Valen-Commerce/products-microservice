@@ -1,6 +1,6 @@
 ## Description
 
-Products microservice. This project is a microservice built with NestJS and drizzle ORM. It also comes with a docker-compose file with a postgres and pgadmin to manage the storage locally.
+Products microservice. This project is a microservice built with NestJS and drizzle ORM. It also comes with a docker-compose file with postgres to manage the storage locally.
 
 ## Installation
 
@@ -20,7 +20,7 @@ $ docker-compose up -d // firts cd db, execute this command to start postgres an
 $ pnpm drizzle-kit studio // start drizzle studio
 $ pnpm run start:dev // start the server
 ```
-pgadmin: http://localhost:5050/
+
 drizzle studio: https://local.drizzle.studio/
 
 ## Run migrations when changes are made to the model
