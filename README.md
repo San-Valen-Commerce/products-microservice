@@ -8,7 +8,7 @@ Products microservice. This project is a microservice built with NestJS and driz
 $ pnpm install // install dependencies
 $ pnpm drizzle-kit generate // generate migrations/creation SQL files
 $ cd db
-$ docker-compose up -d // start postgres and pgadmin
+$ docker-compose up -d // start postgres
 $ pnpm tsx db/scripts/migrate.ts // Apply migrations/creations in the database
 $ cd ..
 
@@ -16,7 +16,7 @@ $ cd ..
 ## Run environment
 
 ```bash
-$ docker-compose up -d // firts cd db, execute this command to start postgres and pgadmin and the cd ..
+$ docker-compose up -d // firts cd db, execute this command to start postgres and the cd ..
 $ pnpm drizzle-kit studio // start drizzle studio
 $ pnpm run start:dev // start the server
 ```
