@@ -8,11 +8,18 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
+export enum CATEGORY_ENUM {
+  ELECTRONICS = 'electronics',
+  CLOTHING = 'clothing',
+  FURNITURE = 'furniture',
+  BOOKS = 'books',
+}
+
 export const categoryEnum = pgEnum('category', [
-  'electronics',
-  'clothing',
-  'furniture',
-  'books',
+  CATEGORY_ENUM.ELECTRONICS,
+  CATEGORY_ENUM.CLOTHING,
+  CATEGORY_ENUM.FURNITURE,
+  CATEGORY_ENUM.BOOKS,
 ]);
 
 export const product = pgTable(
