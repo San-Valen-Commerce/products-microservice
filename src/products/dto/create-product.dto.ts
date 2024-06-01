@@ -9,7 +9,7 @@ import {
   Max,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { CATEGORY_LIST, CategoryType } from 'src/drizzle/schema';
+import { CATEGORY_LIST, Category } from 'src/drizzle/schema';
 
 interface ICreateProduct extends Omit<IProduct, 'id' | 'available'> {}
 
@@ -53,7 +53,7 @@ export class CreateProductDto implements ICreateProduct {
 
   @IsNotEmpty()
   @IsIn(CATEGORY_LIST)
-  category!: CategoryType;
+  category!: Category;
 
   @IsString()
   @IsNotEmpty()
