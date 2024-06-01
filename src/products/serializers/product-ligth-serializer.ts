@@ -1,5 +1,6 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { IProduct, ProductEntity } from '../entities/product.entity';
+import { Category } from 'src/drizzle/schema';
 
 interface IProductLight extends IProduct {
   get discountedPrice(): number;
@@ -21,7 +22,7 @@ export class ProductLightSerializer implements IProductLight {
 
   stock!: number;
   brand!: string;
-  category!: 'electronics' | 'clothing' | 'furniture' | 'books';
+  category!: Category;
 
   @Exclude()
   description!: string;
