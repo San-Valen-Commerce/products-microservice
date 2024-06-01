@@ -1,4 +1,4 @@
-import { Product } from 'src/drizzle/schema';
+import { CategoryType, Product } from 'src/drizzle/schema';
 
 export class ProductEntity implements Product {
   id!: number;
@@ -9,7 +9,7 @@ export class ProductEntity implements Product {
   discountPercentage!: number | null;
   rating!: number | null;
   stock!: number | null;
-  category!: 'electronics' | 'clothing' | 'furniture' | 'books' | null;
+  category!: CategoryType | null;
   thumbnail!: string | null;
   available!: boolean | null;
 }

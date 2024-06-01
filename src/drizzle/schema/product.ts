@@ -40,3 +40,5 @@ export const product = pgTable(
 );
 
 export type Product = typeof product.$inferSelect;
+export type CategoryType = Product['category'];
+export const CATEGORY_LIST = product.category.enumValues;

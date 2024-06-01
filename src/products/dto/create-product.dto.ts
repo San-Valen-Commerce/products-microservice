@@ -10,6 +10,7 @@ import {
   Max,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { CATEGORY_LIST, CategoryType } from 'src/drizzle/schema';
 
 interface ICreateProduct extends Omit<IProduct, 'id' | 'available'> {}
 
@@ -95,19 +96,19 @@ export class CreateProductDto implements ICreateProduct {
   brand!: string;
 
   @IsNotEmpty()
-  @IsIn(['electronics', 'clothing', 'furniture', 'books'])
+  @IsIn(CATEGORY_LIST)
   @ApiProperty({
     example: 'electronics',
     description: 'Category of the product',
     anyOf: [
       {
         type: 'string',
-        enum: ['electronics', 'clothing', 'furniture', 'books'],
+        enum: CATEGORY_LIST,
       },
     ],
     required: true,
   })
-  category!: 'electronics' | 'clothing' | 'furniture' | 'books';
+  category!: CategoryType;
 
   @IsString()
   @IsNotEmpty()
