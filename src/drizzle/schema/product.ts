@@ -23,7 +23,7 @@ export const categoryEnum = pgEnum('category', [
 ]);
 
 export const product = pgTable(
-  'product',
+  'PRODUCT',
   {
     id: serial('id').primaryKey(),
     title: varchar('title', { length: 256 }).unique(),

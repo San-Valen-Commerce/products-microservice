@@ -36,6 +36,13 @@
       "when": 1717014649061,
       "tag": "0004_wakeful_morg",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1717394346551,
+      "tag": "0005_rename-product",
+      "breakpoints": true
     }
   ]
 }
