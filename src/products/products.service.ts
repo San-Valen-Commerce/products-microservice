@@ -1,7 +1,6 @@
 import { count, eq, and } from 'drizzle-orm';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto, UpdateProductDto } from './dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { PaginationDto, IMetadata } from 'src/common';
 import { ProductEntity } from './entities/product.entity';
