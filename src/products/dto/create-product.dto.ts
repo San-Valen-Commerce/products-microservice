@@ -1,4 +1,4 @@
-import { IProduct } from '../entities/product.entity';
+import { IProductEntity } from '../entities/product.entity';
 import {
   IsString,
   IsNotEmpty,
@@ -11,9 +11,9 @@ import {
 import { Transform } from 'class-transformer';
 import { CATEGORY_LIST, Category } from 'src/drizzle/schema';
 
-interface ICreateProduct extends Omit<IProduct, 'id' | 'available'> {}
+interface ICreateProductDto extends Omit<IProductEntity, 'id' | 'available'> {}
 
-export class CreateProductDto implements ICreateProduct {
+export class CreateProductDto implements ICreateProductDto {
   @IsString()
   @IsNotEmpty()
   title!: string;

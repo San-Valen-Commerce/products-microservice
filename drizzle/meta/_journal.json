@@ -43,6 +43,13 @@
       "when": 1717394346551,
       "tag": "0005_rename-product",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1717447797879,
+      "tag": "0006_curious_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }

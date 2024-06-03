@@ -2,16 +2,16 @@ import { Category, Product } from 'src/drizzle/schema';
 
 export class ProductEntity implements Product {
   id!: number;
-  title!: string | null;
-  description!: string | null;
-  brand!: string | null;
-  price!: number | null;
-  discountPercentage!: number | null;
-  rating!: number | null;
-  stock!: number | null;
-  category!: Category | null;
-  thumbnail!: string | null;
-  available!: boolean | null;
+  title!: string;
+  description!: string;
+  brand!: string;
+  price!: number;
+  discountPercentage!: number;
+  rating!: number;
+  stock!: number;
+  category!: Category;
+  thumbnail!: string;
+  available!: boolean;
 }
 
-export interface IProduct extends ProductEntity {}
+export interface IProductEntity extends ProductEntity {}

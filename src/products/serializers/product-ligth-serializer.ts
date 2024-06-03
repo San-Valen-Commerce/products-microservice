@@ -1,8 +1,8 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { IProduct, ProductEntity } from '../entities/product.entity';
+import { IProductEntity, ProductEntity } from '../entities/product.entity';
 import { Category } from 'src/drizzle/schema';
 
-interface IProductLight extends IProduct {
+interface IProductLight extends IProductEntity {
   get discountedPrice(): number;
 }
 
@@ -31,7 +31,7 @@ export class ProductLightSerializer implements IProductLight {
   thumbnail!: string;
 
   @Exclude()
-  available!: boolean | null;
+  available!: boolean;
 
   @Expose()
   get discountedPrice(): number {

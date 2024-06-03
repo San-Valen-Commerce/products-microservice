@@ -1,29 +1,27 @@
-import { count, eq, and } from 'drizzle-orm';
+import { count, eq, and, inArray } from 'drizzle-orm';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto } from './dto';
+import { CreateProductDto, UpdateProductDto, ValidateProductDto } from './dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { PaginationDto, IMetadata } from 'src/common';
-import { ProductEntity } from './entities/product.entity';
+import { PaginationDto, IMetadata, ResposeAllSerializer } from 'src/common';
 import { RpcException } from '@nestjs/microservices';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(private drizzle: DrizzleService) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const result = await this.drizzle.db
-      .insert(this.drizzle.schema.product)
-      .values(createProductDto)
-      .returning();
-
-    if (result.length) {
-      return result[0];
-    }
-
-    return result;
+  async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
+    return (
+      await this.drizzle.db
+        .insert(this.drizzle.schema.product)
+        .values(createProductDto)
+        .returning()
+    )[0];
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(
+    paginationDto: PaginationDto,
+  ): Promise<ResposeAllSerializer<ProductEntity>> {
     const totalProducts = await this.getTotalProducts();
     const { limit, page } = paginationDto;
     const lastPage = Math.ceil(totalProducts / limit);
@@ -47,7 +45,7 @@ export class ProductsService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<ProductEntity> {
     const result = await this.drizzle.db
       .select()
       .from(this.drizzle.schema.product)
@@ -68,7 +66,10 @@ export class ProductsService {
     return result[0];
   }
 
-  async update(identifier: number, updateProductDto: UpdateProductDto) {
+  async update(
+    identifier: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<ProductEntity> {
     const { id, ...updateProductDtoWithoutId } = updateProductDto;
 
     const result = await this.drizzle.db
@@ -87,7 +88,7 @@ export class ProductsService {
     return result[0];
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<ProductEntity> {
     const result = await this.drizzle.db
       .delete(this.drizzle.schema.product)
       .where(eq(this.drizzle.schema.product.id, id))
@@ -103,7 +104,7 @@ export class ProductsService {
     return result[0];
   }
 
-  async softRemove(id: number) {
+  async softRemove(id: number): Promise<ProductEntity> {
     const result = await this.drizzle.db
       .update(this.drizzle.schema.product)
       .set({ available: false })
@@ -120,7 +121,58 @@ export class ProductsService {
     return result[0];
   }
 
-  async getTotalProducts() {
+  async validateProductsExistence(
+    validateProducts: ValidateProductDto[],
+  ): Promise<ProductEntity[]> {
+    const idsWithoutDuplicates = Array.from(
+      new Set(validateProducts.map((p) => p.id)),
+    );
+
+    const validateProductsMapping = new Map(
+      validateProducts.map((p) => [p.id, p]),
+    );
+
+    const products = await this.drizzle.db
+      .select()
+      .from(this.drizzle.schema.product)
+      .where(
+        and(
+          eq(this.drizzle.schema.product.available, true),
+          inArray(this.drizzle.schema.product.id, idsWithoutDuplicates),
+        ),
+      );
+
+    if (products.length !== idsWithoutDuplicates.length) {
+      throw new RpcException({
+        message: 'Some products do not exist or are not available',
+        status: HttpStatus.BAD_REQUEST,
+      });
+    }
+
+    for (const product of products) {
+      if (product.stock === 0) {
+        throw new RpcException({
+          message: `Product #${product.id} is out of stock`,
+          status: HttpStatus.BAD_REQUEST,
+        });
+      }
+
+      const validateProduct = validateProductsMapping.get(product.id);
+
+      if (validateProduct) {
+        if (product.stock < validateProduct.quantity) {
+          throw new RpcException({
+            message: `Product #${product.id} does not have enough stock`,
+            status: HttpStatus.BAD_REQUEST,
+          });
+        }
+      }
+    }
+
+    return products;
+  }
+
+  async getTotalProducts(): Promise<number> {
     return (
       await this.drizzle.db
         .select({ count: count() })

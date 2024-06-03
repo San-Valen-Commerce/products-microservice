@@ -26,18 +26,20 @@ export const product = pgTable(
   'PRODUCT',
   {
     id: serial('id').primaryKey(),
-    title: varchar('title', { length: 256 }).unique(),
-    description: varchar('description', { length: 1024 }),
-    price: integer('price').default(0),
-    discountPercentage: integer('discount_percentage').default(0),
-    rating: integer('rating').default(0),
-    stock: integer('stock').default(0),
-    brand: varchar('brand', { length: 256 }).default('Generic'),
-    category: categoryEnum('category'),
-    thumbnail: varchar('thumbnail_media_url', { length: 256 }).default(
-      'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png',
-    ),
-    available: boolean('available').default(true),
+    title: varchar('title', { length: 256 }).notNull().unique(),
+    description: varchar('description', { length: 1024 }).notNull(),
+    price: integer('price').notNull().default(0),
+    discountPercentage: integer('discount_percentage').notNull().default(0),
+    rating: integer('rating').notNull().default(0),
+    stock: integer('stock').notNull().default(0),
+    brand: varchar('brand', { length: 256 }).notNull().default('Generic'),
+    category: categoryEnum('category').notNull(),
+    thumbnail: varchar('thumbnail_media_url', { length: 256 })
+      .notNull()
+      .default(
+        'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png',
+      ),
+    available: boolean('available').notNull().default(true),
   },
   (table) => {
     return {
