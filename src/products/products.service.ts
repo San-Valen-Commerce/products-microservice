@@ -121,7 +121,7 @@ export class ProductsService {
     return result[0];
   }
 
-  async validateProductsExistence(
+  async validateProductsExistenceAndStock(
     validateProducts: ValidateProductDto[],
   ): Promise<ProductEntity[]> {
     const idsWithoutDuplicates = Array.from(
@@ -167,6 +167,33 @@ export class ProductsService {
           });
         }
       }
+    }
+
+    return products;
+  }
+
+  async validateProductsExistence(
+    validateProducts: ValidateProductDto[],
+  ): Promise<ProductEntity[]> {
+    const idsWithoutDuplicates = Array.from(
+      new Set(validateProducts.map((p) => p.id)),
+    );
+
+    const products = await this.drizzle.db
+      .select()
+      .from(this.drizzle.schema.product)
+      .where(
+        and(
+          eq(this.drizzle.schema.product.available, true),
+          inArray(this.drizzle.schema.product.id, idsWithoutDuplicates),
+        ),
+      );
+
+    if (products.length !== idsWithoutDuplicates.length) {
+      throw new RpcException({
+        message: 'Some products do not exist or are not available',
+        status: HttpStatus.BAD_REQUEST,
+      });
     }
 
     return products;

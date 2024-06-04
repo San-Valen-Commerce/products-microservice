@@ -71,4 +71,13 @@ export class ProductsController {
       validateProducts,
     );
   }
+
+  @MessagePattern({ cmd: 'validate_products_existence_and_stock' })
+  async validateProductsExistenceAndStock(
+    @Payload() validateProducts: ValidateProductDto[],
+  ): Promise<ProductEntity[]> {
+    return await this.productsService.validateProductsExistenceAndStock(
+      validateProducts,
+    );
+  }
 }
