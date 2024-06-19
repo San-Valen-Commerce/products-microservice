@@ -1,1 +1,0 @@
-CREATE INDEX IF NOT EXISTS "available_idx" ON "product" ("available");
