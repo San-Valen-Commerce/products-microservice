@@ -26,10 +26,8 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const port = envs.PORT || 3001;
-
   await app.listen();
-  logger.log(`Products Microservice running on port ${port}`);
+  logger.log(`Products Microservice`);
 }
 
 bootstrap();
